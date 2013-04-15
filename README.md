@@ -1,6 +1,6 @@
 # mapmap
 
-FIXME
+Learning how to create web application with Clojure.
 
 ## Prerequisites
 
@@ -16,4 +16,5 @@ To start a web server for the application, run:
 
 ## License
 
-Copyright © 2013 FIXME
+Copyright © 2013 ponkore.
+
