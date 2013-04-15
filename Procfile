@@ -1,1 +1,1 @@
-web: lein with-profile production trampoline run -m mapmap.web
+web: lein with-profile production trampoline ring server
