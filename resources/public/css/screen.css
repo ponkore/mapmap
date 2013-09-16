@@ -1,55 +1,47 @@
-body {	
-    background-color: #fff;
-    color: #333;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+html,
+body {
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;          
+    height: 100%;    
 }
 
-#register {
-    float: left;
-    display: inline-block;
+.error {
+    color: red;
 }
 
-h1 {
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-	background-color: #E9E9E9;
-	border: 1px solid #CFCFCF;
-	border-radius: 4px;
+/*footer based on http://twitter.github.com/bootstrap/examples/sticky-footer-navbar.html */
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -60px;
 }
 
-.nav li {
-    float: left;
-    list-style: none;
-    padding: 5px;
+/* Set the fixed height of the footer here */
+#push,
+#footer {
+    height: 60px;
+}
+      
+#footer {
+    background-color: #f5f5f5;
 }
 
-.navbar {
-    text-align: right;
-    padding: 5px;
-    margin-bottom: 10px;
+/* Lastly, apply responsive CSS fixes as necessary */
+@media (max-width: 767px) {
+    #footer {
+          margin-left: -20px;
+          margin-right: -20px;
+          padding-left: 20px;
+          padding-right: 20px;
+    }
 }
 
-#container {
-    height: auto;
-    margin-bottom: 10px;
+#wrap > .container,
+#wrap > .container-fluid{
+    padding-top: 60px;
 }
-
-#footer {    
-    width: 95%;
-    margin-left: 1%;
-    margin-right: 1%;
-    position:absolute;
-    bottom:0;
-    font-size: 11px;
-    font-weight: bold;
-    height: auto;    
-    text-align: center;
-    
-	padding-top: 10px;
-	
-	-webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-	background-color: #E9E9E9;
-	border: 1px solid #CFCFCF;
-	border-radius: 4px;
+.container .footer-text {
+    margin: 20px 0;
 }
