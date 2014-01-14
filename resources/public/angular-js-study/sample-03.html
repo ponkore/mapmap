@@ -1,0 +1,40 @@
+<!doctype html>
+<html ng-app="myapp">
+  <head>
+    <!-- angular.js -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.js"></script>
+    <!-- angular bootstrap ui with templates -->
+    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.9.0.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- example -->
+    <script src="sample-03.js"></script>
+  </head>
+  <body>
+    <script type="text/ng-template" id="customTemplate.html">
+      <a>
+        <img ng-src="http://upload.wikimedia.org/wikipedia/commons/thumb/{{match.model.flag}}" width="16">
+        <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+      </a>
+    </script>
+    <div class='container-fluid' ng-controller="TypeaheadCtrl">
+      <h4>Static arrays</h4>
+      <pre>Model: {{selected | json}}</pre>
+      <input type="text" ng-model="selected"
+             typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control">
+      <h4>Asynchronous results</h4>
+      <pre>Model: {{asyncSelected | json}}</pre>
+      <input type="text" ng-model="asyncSelected"
+             placeholder="Locations loaded via $http"
+             typeahead="address for address in getLocation($viewValue) | filter:$viewValue"
+             typeahead-loading="loadingLocations" class="form-control">
+      <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+      <h4>Custom templates for results</h4>
+      <pre>Model: {{customSelected | json}}</pre>
+      <input type="text" ng-model="customSelected"
+             placeholder="Custom template"
+             typeahead="state as state.name for state in statesWithFlags | filter:{name:$viewValue}"
+             typeahead-template-url="customTemplate.html" class="form-control">
+    </div>
+  </body>
+</html>

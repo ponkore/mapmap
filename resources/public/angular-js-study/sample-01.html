@@ -1,0 +1,15 @@
+<html ng-app>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.8/angular.min.js"></script>
+    <script>
+      function HogeCtrl($scope) {
+        $scope.frameworks = ["Backbone.js", "Angular.js", "Ember.js"];
+      }
+    </script>
+  </head>
+  <body ng-controller="HogeCtrl">
+    <ul>
+      <li ng-repeat="framework in frameworks">{{framework}}</li>
+    </ul>
+  </body>
+</html>
