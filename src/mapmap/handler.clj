@@ -4,7 +4,9 @@
             [noir.util.middleware :as middleware]
             [compojure.route :as route]
             [taoensso.timbre :as timbre]
-            [com.postspectacular.rotor :as rotor]))
+            [com.postspectacular.rotor :as rotor]
+            [selmer.parser :as parser]
+            [environ.core :refer [env]]))
 
 (defroutes app-routes
   (route/resources "/")
@@ -23,11 +25,12 @@
      :async? false ; should be always false for rotor
      :max-message-per-msecs nil
      :fn rotor/append})
-  
+
   (timbre/set-config!
     [:shared-appender-config :rotor]
     {:path "mapmap.log" :max-size (* 512 1024) :backlog 10})
-  
+
+  (if (env :selmer-dev) (parser/cache-off!))
   (timbre/info "mapmap started successfully"))
 
 (defn destroy
@@ -36,13 +39,27 @@
   []
   (timbre/info "mapmap is shutting down..."))
 
-(def app (middleware/app-handler
-           ;;add your application routes here
-           [home-routes app-routes]
-           ;;add custom middleware here
-           :middleware []
-           ;;add access rules here
-           ;;each rule should be a vector
-           :access-rules []))
+(defn template-error-page [handler]
+  (if (env :selmer-dev)
+    (fn [request]
+      (try
+        (handler request)
+        (catch clojure.lang.ExceptionInfo ex
+          (let [{:keys [type error-template] :as data} (ex-data ex)]
+            (if (= :selmer-validation-error type)
+              {:status 500
+               :body (parser/render error-template data)}
+              (throw ex))))))
+    handler))
 
-(def war-handler (middleware/war-handler app))
+(def app (middleware/app-handler
+           ;; add your application routes here
+           [home-routes app-routes]
+           ;; add custom middleware here
+           :middleware [template-error-page]
+           ;; add access rules here
+           :access-rules []
+           ;; serialize/deserialize the following data formats
+           ;; available formats:
+           ;; :json :json-kw :yaml :yaml-kw :edn :yaml-in-html
+           :formats [:json-kw :edn]))
