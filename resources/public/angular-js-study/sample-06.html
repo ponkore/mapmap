@@ -12,12 +12,19 @@
     <!-- ng-grid.js & .css -->
     <script type="text/javascript" src="ng-grid-2.0.7.min.js"></script>
     <link rel="stylesheet" href="ng-grid.min.css">
+    <style>
+.gridStyle {
+    border: 1px solid rgb(212,212,212);
+    width: 400px;
+    height: 300px
+}
+    </style>
     <!-- example -->
     <script type="text/javascript" src="sample-06.js"></script>
   </head>
   <body>
     <div ng-controller="GridDemoCtrl">
-      <div ng-grid="myOptions"></div>
+      <div class="gridStyle" ng-grid="myOptions"></div>
     </div>
   </body>
 </html>
