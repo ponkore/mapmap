@@ -6,5 +6,9 @@ var GridDemoCtrl = function ($scope) {
                    {name: "島風", age: 29},
                    {name: "雷", age: 34}];
   $scope.myOptions = { data: 'myData',
-                       columnDefs: [{field:'name', displayName:'名前'}, {field:'age', displayName:'年齢'}]};
+                       columnDefs: [
+                           {field:'name', displayName:'名前'},
+                           {field:'age', displayName:'年齢',
+                                cellTemplate: '<div ng-class="{green: row.getProperty(col.field) > 30}"><div class="ngCellText">{{row.getProperty(col.field)}}</div></div>'}]
+        };
 };
