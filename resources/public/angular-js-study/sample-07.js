@@ -20,17 +20,19 @@ app.controller('GridDemoCtrl', function($scope, $http) {
     };
     $scope.getPagedDataAsync = function(pageSize, page, searchText) {
         setTimeout(function() {
+       //     var jsonsrc = 'jsonFiles/largeLoad.json';
+            var jsonsrc = '/test';
             var data;
             if (searchText) {
                 var ft = searchText.toLowerCase();
-                $http.get('jsonFiles/largeLoad.json').success(function(largeLoad) {
+                $http.get(jsonsrc).success(function(largeLoad) {
                     data = largeLoad.filter(function(item) {
                         return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
                     });
                     $scope.setPagingData(data,page,pageSize);
                 });
             } else {
-                $http.get('jsonFiles/largeLoad.json').success(function(largeLoad) {
+                $http.get(jsonsrc).success(function(largeLoad) {
                     $scope.setPagingData(largeLoad,page,pageSize);
                 });
             }
