@@ -26,4 +26,3 @@
 
 (defn render [template & [params]]
   (RenderableTemplate. template params))
-

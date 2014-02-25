@@ -7,5 +7,9 @@
   [request]
   (layout/render "jrw-lines-example.html"))
 
+;;(def js-path "src/mapmap/controller/")
+
 (defroutes map-routes
-  (GET "/map" request (map-page request)))
+  (GET "/map" request (map-page request))
+  ;;(GET "/controller/:id" [id] (slurp (str js-path id)))
+  )
