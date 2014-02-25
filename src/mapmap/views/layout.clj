@@ -6,6 +6,13 @@
 
 (def template-path "mapmap/views/templates/")
 
+(defn- render-file'
+  [template params]
+  (parser/render-file
+          (str template-path template)
+          params
+          {:tag-open \[ :tag-close \]}))
+
 (deftype RenderableTemplate [template params]
   Renderable
   (render [this request]
@@ -13,7 +20,7 @@
       (->> (assoc params
                   (keyword (s/replace template #".html" "-selected")) "active"
                   :servlet-context (:context request))
-        (parser/render-file (str template-path template))
+        (render-file' template)
         response)
       "text/html; charset=utf-8")))
 
