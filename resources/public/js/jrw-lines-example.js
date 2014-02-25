@@ -81,17 +81,17 @@ $(function() {
   }
 
   function mapMoved(event) {
-    log(event.type);
+//    log(event.type);
   }
 
   function mapZoomEnd(event) {
-    log(event.type + "/" + map.numZoomLevels + "/" + map.getZoom());
+//    log(event.type + "/" + map.numZoomLevels + "/" + map.getZoom());
     var displayStationLabel = (map.getZoom() > 12);
   }
 
-  function log(msg) {
-    document.getElementById("output").innerHTML += msg + "\n";
-  }
+//  function log(msg) {
+//    document.getElementById("output").innerHTML += msg + "\n";
+//  }
 
   var urls = [
       "json/JRW-000-sanyoshinkansen.geojson",
