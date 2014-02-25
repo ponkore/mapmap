@@ -1,5 +1,5 @@
-(ns mapmap.handler  
-  (:require [compojure.core :refer [defroutes]]            
+(ns mapmap.handler
+  (:require [compojure.core :refer [defroutes]]
             [mapmap.routes.home :refer [home-routes]]
             [noir.util.middleware :as middleware]
             [compojure.route :as route]
