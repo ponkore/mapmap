@@ -1,6 +1,7 @@
 (ns mapmap.handler
   (:require [compojure.core :refer [defroutes]]
             [mapmap.routes.home :refer [home-routes]]
+            [mapmap.routes.map :refer [map-routes]]
             [noir.util.middleware :as middleware]
             [compojure.route :as route]
             [taoensso.timbre :as timbre]
@@ -54,7 +55,7 @@
 
 (def app (middleware/app-handler
            ;; add your application routes here
-           [home-routes app-routes]
+           [map-routes home-routes app-routes]
            ;; add custom middleware here
            :middleware [template-error-page]
            ;; add access rules here

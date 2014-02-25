@@ -1,0 +1,11 @@
+[% extends "mapmap/views/templates/ng-base.html" %]
+[% block content %]
+  <script>
+  [% include "mapmap/js/sample-01.js" %]
+  </script>
+  <div ng-controller="HogeCtrl">
+    <ul>
+      <li ng-repeat="framework in frameworks">{{framework}}</li>
+    </ul>
+  </div>
+[% endblock %]
