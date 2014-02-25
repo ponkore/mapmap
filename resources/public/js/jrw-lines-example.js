@@ -2,7 +2,7 @@
 var lat=34.73368;
 var lon=135.500035;
 var zoom=12;
-  
+
 var map; //complex object of type OpenLayers.Map
 
 //Initialise the 'map' object
