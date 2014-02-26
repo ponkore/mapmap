@@ -39,13 +39,13 @@
   []
   (read-all-data "resources/public/json/JRW-railroad.geojson" json->line))
 
-(def lines (read-all-lines))
+;;(def lines (read-all-lines))
 
 (defn read-all-stations
   []
   (read-all-data "resources/public/json/JRW-stations.geojson" json->station))
 
-(def stations (read-all-stations))
+;;(def stations (read-all-stations))
 
 (defn to-station-feature-map
   [info]
