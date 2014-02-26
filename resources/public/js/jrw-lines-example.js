@@ -149,7 +149,7 @@ $(function() {
   $.each(urls, function(i, val) {
     var layer = new OpenLayers.Layer.Vector("L" + i, { styleMap: composedDrawStyle });
     map.addLayer(layer);
-    var file = "/src/mapmap/model/json/" + val;
+    var file = "/map/" + val; // TODO: ajax化
     create_features(file, feature_composed_fn, layer);
   });
 });

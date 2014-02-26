@@ -4,12 +4,9 @@
             [noir.response :refer [json]]))
 
 (defn map-page
-  [request]
-  (layout/render "jrw-lines-example.html"))
-
-;;(def js-path "src/mapmap/controller/")
+  "returns JSON string"
+  [id]
+  (slurp (str "src/mapmap/model/json/" id)))
 
 (defroutes map-routes
-  (GET "/map" request (map-page request))
-  ;;(GET "/controller/:id" [id] (slurp (str js-path id)))
-  )
+  (GET "/map/:id" id (map-page id)))
