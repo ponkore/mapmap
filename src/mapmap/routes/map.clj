@@ -5,8 +5,8 @@
 
 (defn map-page
   "returns JSON string"
-  [id]
-  (slurp (str "src/mapmap/model/json/" id)))
+  [params]
+  (slurp (str "src/mapmap/model/json/" (get-in params [:params :id]))))
 
 (defroutes map-routes
-  (GET "/map/:id" id (map-page id)))
+  (GET "/map/:id" params (map-page params)))
