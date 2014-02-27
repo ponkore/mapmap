@@ -1,8 +1,7 @@
 (ns mapmap.routes.home
   (:use compojure.core)
   (:require [mapmap.views.layout :as layout]
-            [mapmap.util :as util]
-            [noir.response :refer [json]]))
+            [mapmap.util :as util]))
 
 (defn home-page []
   (layout/render

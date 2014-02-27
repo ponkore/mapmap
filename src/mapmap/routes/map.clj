@@ -3,10 +3,16 @@
   (:require [mapmap.views.layout :as layout]
             [noir.response :refer [json]]))
 
-(defn map-page
+(defn- map-page
   "returns JSON string"
-  [params]
-  (slurp (str "src/mapmap/model/json/" (get-in params [:params :id]))))
+  [id]
+  (slurp (str "src/mapmap/model/json/" id)))
+
+(defn- map-view
+  ""
+  []
+  (layout/render "ng-map.html" {}))
 
 (defroutes map-routes
-  (GET "/map/:id" params (map-page params)))
+  (GET "/mapview" [] (map-view))
+  (GET "/map/:id" [id] (map-page id)))

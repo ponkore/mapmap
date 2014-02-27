@@ -95,7 +95,6 @@ $(function() {
 
   var urls = [
       "JRW-000-sanyoshinkansen.geojson",
-/*
       "JRW-001-hokurikusen.geojson",
       "JRW-002-etsumihokusen.geojson",
       "JRW-003-nanaosen.geojson",
@@ -103,31 +102,25 @@ $(function() {
       "JRW-005-himisen.geojson",
       "JRW-006-takayamasen.geojson",
       "JRW-007-ooitosen.geojson",
-*/
       "JRW-008-kansaisen.geojson",
-/*
       "JRW-009-kusatsusen.geojson",
       "JRW-010-narasen.geojson",
       "JRW-011-sakuraisen.geojson",
       "JRW-012-wakayamasen.geojson",
-*/
       "JRW-013-hanwasen.geojson",
       "JRW-014-kiseisen.geojson",
       "JRW-015-tokaidosen.geojson",
       "JRW-016-koseisen.geojson",
       "JRW-017-fukuchiyamasen.geojson",
-/*
       "JRW-018-obamasen.geojson",
       "JRW-019-kakogawasen.geojson",
       "JRW-020-bantansen.geojson",
       "JRW-021-maizurusen.geojson",
-*/
       "JRW-022-kanjosen.geojson",
       "JRW-023-katamachisen.geojson",
       "JRW-024-tozaisen.geojson",
       "JRW-025-oosakahigashisen.geojson",
       "JRW-026-sanyosen.geojson",
-/*
       "JRW-027-kishinsen.geojson",
       "JRW-028-akosen.geojson",
       "JRW-029-tsuyamasen.geojson",
@@ -150,7 +143,6 @@ $(function() {
       "JRW-046-kisugisen.geojson",
       "JRW-047-sankosen.geojson",
       "JRW-048-hakataminamisen.geojson"
-*/
       ];
   $.each(urls, function(i, val) {
     var layer = new OpenLayers.Layer.Vector("L" + i, { styleMap: composedDrawStyle });
