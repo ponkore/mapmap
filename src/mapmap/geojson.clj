@@ -74,22 +74,21 @@
 (def ^{:private true} earth-r 6378.137) ;; 地球の半径 (km)
 
 (defn distance
-  "return two points of distance as 'm'.
+  "return two points of distance as 'km'.
 see http://www.kiteretsu-so.com/archives/1183 "
-  ([p1 p2] (let [[lon1 lat1] p1
-                 [lon2 lat2] p2]
-             (distance lon1 lat1 lon2 lat2)))
   ([lon1 lat1 lon2 lat2]
+     (distance [lon1 lat1] [lon2 lat2]))
+  ([[lon1 lat1] [lon2 lat2]]
      (let [[lon1 lon2] (if (< lon1 lon2) [lon1 lon2] [lon2 lon1])
            [lat1 lat2] (if (< lat1 lat2) [lat1 lat2] [lat2 lat1])
            lat-rad (-> (- lat2 lat1) Math/toRadians)
            lon-rad (-> (- lon2 lon1) Math/toRadians)
            y-diff (* earth-r lat-rad)
            x-diff (* (Math/cos (Math/toRadians lat1)) earth-r lon-rad)]
-       (* 1000 (Math/sqrt (+ (* x-diff x-diff) (* y-diff y-diff)))))))
+       (Math/sqrt (+ (* x-diff x-diff) (* y-diff y-diff))))))
 
 ;;(distance [135.4949770 34.701909] [139.766084 35.681382])
-;;=> 405807.81066334544
+;;=> 405.80781066334544
 
 ;;(def lines (read-all-json "JRW-railroad.geojson" json->line))
 ;;(->> @lines (map #(dissoc % :geometry :bounding-box)))
