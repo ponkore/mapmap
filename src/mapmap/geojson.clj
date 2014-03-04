@@ -15,22 +15,26 @@
 (defn- json->station
   "元データ(駅)の１GeoJson を内部形式(駅)に変換する。"
   [station-info]
-  (let [info station-info]
+  (if (and (= (:type station-info) "Feature")
+           (= (get-in station-info '(:geometry :type)) "Point"))
     (assoc {}
-      :id (:id info)
-      :station-name (get-in info '(:properties :N05_011))
-      :geometry (:geometry info))))
+      :id (:id station-info)
+      :station-name (get-in station-info '(:properties :N05_011))
+      :geometry (get-in station-info '(:geometry :coordinates)))
+    nil))
 
 (defn- json->line
   "元データ(線)の１GeoJson を内部形式(線)に変換する。"
   [line-info]
-  (let [info line-info
-        geometry (:geometry info)]
-    (assoc {}
-      :id (:id info)
-      :line-name (get-in info '(:properties :N05_002))
-      :geometry geometry
-      :bounding-box (calc-bounding-box (:coordinates geometry)))))
+  (if (and (= (:type line-info) "Feature")
+           (= (get-in line-info '(:geometry :type)) "LineString"))
+    (let [geometry (get-in line-info '(:geometry :coordinates))]
+      (assoc {}
+        :id (:id line-info)
+        :line-name (get-in line-info '(:properties :N05_002))
+        :geometry geometry
+        :bounding-box (calc-bounding-box geometry)))
+    nil))
 
 (def ^{:private true}
   json-root-dir
@@ -38,11 +42,14 @@
 
 (defn- read-all-data
   ""
-  [fname transform-fn]
-  (let [json-data (-> fname slurp (json/read-str :key-fn keyword))]
-    (->> json-data
-         :features
-         (map transform-fn))))
+  ([fname transform-fn]
+     (read-all-data json-root-dir fname transform-fn))
+  ([root-dir fname transform-fn]
+     (let [fullpath (str root-dir fname)
+           json-data (-> fullpath slurp (json/read-str :key-fn keyword))]
+       (->> json-data
+            :features
+            (map transform-fn)))))
 
 (defn- read-all-json
   ""
@@ -52,24 +59,27 @@
 (defn- to-station-feature-map
   ""
   [info]
-  {:type "Feature"
-   :id (:id info)
-   :properties {:name (:station-name info)}
-   :geometry (:geometry info)})
+  (assoc {}
+    :type "Feature"
+    :id (:id info)
+    :properties {:name (:station-name info)}
+    :geometry (:geometry info)))
 
 (defn- to-line-feature-map
   ""
   [info]
-  {:type "Feature"
-   :id (:id info)
-   :properties {:name (:line-name info)}
-   :geometry (:geometry info)})
+  (assoc {}
+    :type "Feature"
+    :id (:id info)
+    :properties {:name (:line-name info)}
+    :geometry (:geometry info)))
 
 (defn make-feature-collection
   ""
   [coll]
-  {:type "FeatureCollection"
-   :features coll})
+  (assoc {}
+    :type "FeatureCollection"
+    :features coll))
 
 (def ^{:private true} earth-r 6378.137) ;; 地球の半径 (km)
 
@@ -87,9 +97,6 @@ see http://www.kiteretsu-so.com/archives/1183 "
            x-diff (* (Math/cos (Math/toRadians lat1)) earth-r lon-rad)]
        (Math/sqrt (+ (* x-diff x-diff) (* y-diff y-diff))))))
 
-;;(distance [135.4949770 34.701909] [139.766084 35.681382])
-;;=> 405.80781066334544
-
 ;;(def lines (read-all-json "JRW-railroad.geojson" json->line))
 ;;(->> @lines (map #(dissoc % :geometry :bounding-box)))
 ;;(->> @lines (map to-line-feature-map) (take 2))
@@ -100,28 +107,3 @@ see http://www.kiteretsu-so.com/archives/1183 "
 ;;(def c (get-in (->> @lines (map to-line-feature-map) (first)) '(:geometry :coordinates)))
 ;; (partition 2 1 c)
 ;; (take 4 (map (fn [[p1 p2]] (distance p1 p2)) (partition 2 1 c)))
-
-;; ({:type "Feature",
-;;   :id 0,
-;;   :properties {:name "北陸線"},
-;;   :geometry
-;;   {:type "LineString",
-;;    :coordinates
-;;    [[136.289505 35.31387]
-;;     [136.28993 35.315]
-;;     [136.290575 35.316243]
-;; ;;; :
-;;     [138.24128 37.1697]
-;;     [138.242233 37.170258]]}}
-;;  {:type "Feature",
-;;   :id 1,
-;;   :properties {:name "越美北線"},
-;;   :geometry
-;;   {:type "LineString",
-;;    :coordinates
-;;    [[136.66147 35.90449]
-;;     [136.66112 35.90434]
-;;     [136.66055 35.90409]
-;; ;;; :
-;;     [136.21814 36.0402]
-;;     [136.21801 36.04068]]}})
