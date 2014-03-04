@@ -1,7 +1,7 @@
-(ns mapmap.test.handler
-  (:use clojure.test
-        ring.mock.request
-        mapmap.handler))
+(ns mapmap.handler-test
+  (:require [clojure.test :refer :all]
+            [ring.mock.request :refer :all]
+            [mapmap.handler :refer :all]))
 
 (deftest test-app
   (testing "main route"
