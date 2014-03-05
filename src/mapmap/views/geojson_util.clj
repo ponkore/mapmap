@@ -2,16 +2,16 @@
   (:require [clojure.data.json :as json]
             [mapmap.model.geojson :as model]))
 
-(defn- to-station-feature-map
+(defn to-station-feature-map
   ""
   [info]
   (assoc {}
     :type "Feature"
     :id (:id info)
     :properties {:name (:station-name info)}
-    :geometry (:geometry info)))
+    :geometry {:type "Point" :coordinates (:geometry info)}))
 
-(defn- to-line-feature-map
+(defn to-line-feature-map
   ""
   [info]
   (assoc {}

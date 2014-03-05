@@ -4,6 +4,7 @@ var lon=135.500035;
 var zoom=12;
 
 var map; //complex object of type OpenLayers.Map
+var layer;
 
 //Initialise the 'map' object
 $(function() {
@@ -42,7 +43,7 @@ $(function() {
           fillOpacity: 1.0,
           label : "${name}",
           fontColor: "${fontcolor}",
-          fontSize: "10px",
+          fontSize: "15px",
           fontFamily: "Courier New, monospace",
           fontWeight: "bold",
           labelOutlineColor: "white",
@@ -51,9 +52,28 @@ $(function() {
           pointRadius: 8,
           strokeColor: "#00FF00"}});
 
-  function create_features(url, create_feature_fn, layer) {
+  layer = new OpenLayers.Layer.Vector("L01", { styleMap: composedDrawStyle });
+  map.addLayer(layer);
+
+  function create_feature_fn(val, geometry) {
+    var isShinkansen = (val["properties"]["name"] == "山陽新幹線");
+    var feature = new OpenLayers.Feature.Vector(geometry, {
+      id: val["id"],
+      name: val["properties"]["name"],
+      fontcolor: (isShinkansen ? "#0000FF" : "#000000"),
+      strokeWidth: 2.0,
+      strokeColor: "#FF0000"
+    });
+    return feature;
+  }
+
+  function create_features(param) {
     var geojson_format = new OpenLayers.Format.GeoJSON();
-    $.getJSON(url, "",
+    var url = "/map/stations";
+    if (layer != undefined) {
+      layer.removeAllFeatures();
+    }
+    $.getJSON(url, param,
       function(data, textStatus, jqXHR) {
         $.each(data["features"], function(i, val) {
           var geometry = geojson_format.parseGeometry(val["geometry"]);
@@ -66,41 +86,30 @@ $(function() {
      });
   }
 
-  function feature_composed_fn(val, geometry) {
-    var isShinkansen = (val["properties"]["N05_002"] == "山陽新幹線");
-    var isStation = (val["geometry"]["type"] == "Point");
-    var nn = (isStation ? val["properties"]["N05_011"] : val["properties"]["N05_002"]);
-    var feature = new OpenLayers.Feature.Vector(geometry, {
-      id: val["id"],
-      name: nn,
-      fontcolor: (isShinkansen ? "#0000FF" : "#000000"),
-      strokeWidth: (isStation? 2.0 : 4.5),
-      strokeColor: (isStation? "#FF0000" : (isShinkansen ? "#0000FF" : "#000000"))
-    });
-    return feature;
-  }
-
   function mapMoved(event) {
-//    log(event.type);
+    var extent = map.getExtent().transform(
+        new OpenLayers.Projection("EPSG:900913"),
+        new OpenLayers.Projection("EPSG:4326")
+    );
+    var zoom = map.getZoom();
+    var scale = map.getScale();
+    console.debug("left:" + extent.left +
+                  ",top:" + extent.top +
+                  ",right:" + extent.right +
+                  ",bottom:" + extent.bottom +
+                  ",zoom:" + zoom +
+                  ",scale:" + scale);
+    create_features({
+      left: extent.left,
+      top: extent.top,
+      right: extent.right,
+      bottom: extent.bottom,
+      zoom: zoom,
+      scale: scale
+    });
   }
 
   function mapZoomEnd(event) {
-//    log(event.type + "/" + map.numZoomLevels + "/" + map.getZoom());
-//    var displayStationLabel = (map.getZoom() > 12);
+    console.debug(event.type + "/" + map.numZoomLevels + "/" + map.getZoom());
   }
-
-//  function log(msg) {
-//    document.getElementById("output").innerHTML += msg + "\n";
-//  }
-
-  var urls = [
-      "JRW-railroad.geojson",
-      "JRW-stations.geojson"
-      ];
-  $.each(urls, function(i, val) {
-    var layer = new OpenLayers.Layer.Vector("L" + i, { styleMap: composedDrawStyle });
-    map.addLayer(layer);
-    var file = "/map/" + val;
-    create_features(file, feature_composed_fn, layer);
-  });
 });
