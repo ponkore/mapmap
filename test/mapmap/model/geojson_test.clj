@@ -39,7 +39,7 @@
        :N05_006 "EB03_19101001",
        :N05_004 "1972"},
       :type "Feature",
-      :id 368}) => {:geometry [135.500035 34.73368], :id 368, :station-name "新大阪"})))
+      :id 368}) => {:geometry [135.500035 34.73368], :id 368, :station-name "新大阪"}))
 
 (fact "(private)json->line"
   (fact "argument is nil"
@@ -71,7 +71,7 @@
       :geometry { :type "LineString", :coordinates [[ 130.4, 33.5 ], [ 130.5, 33.6 ]]}}
      ) => {:id 16, :line-name "山陽新幹線",
            :bounding-box [130.4 33.5 130.5 33.6]
-           :geometry [[130.4 33.5] [130.5 33.6]]})))
+           :geometry [[130.4 33.5] [130.5 33.6]]}))
 
 (fact "distance"
   (fact "two points"
