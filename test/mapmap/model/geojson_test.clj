@@ -73,8 +73,26 @@
            :bounding-box [130.4 33.5 130.5 33.6]
            :geometry [[130.4 33.5] [130.5 33.6]]}))
 
+(fact "get-lines"
+  )
+
+(fact "get-stations"
+  )
+
 (fact "distance"
   (fact "two points"
     (distance [135.4949770 34.701909] [139.766084 35.681382]) => 405.80781066334544)
   (fact "four numbers"
     (distance 135.4949770 34.701909 139.766084 35.681382) => 405.80781066334544))
+
+(fact "find-mid-point"
+  )
+
+;;(->> @lines (map #(dissoc % :geometry :bounding-box)))
+;;(->> @lines (map to-line-feature-map) (take 2))
+;;(->> @stations (map to-station-feature-map) (take 10))
+;;(->> @stations (group-by :station-name) (vals) (filter #(>= (count %) 2)))
+;;(def h (->> @stations (group-by :station-name) (vals) (filter #(>= (count %) 2))))
+;;(def c (get-in (->> @lines (map to-line-feature-map) (first)) '(:geometry :coordinates)))
+;; (partition 2 1 c)
+;; (take 4 (map (fn [[p1 p2]] (distance p1 p2)) (partition 2 1 c)))
