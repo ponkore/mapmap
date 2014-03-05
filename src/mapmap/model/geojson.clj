@@ -1,7 +1,5 @@
 (ns mapmap.model.geojson
-  (:require [clojure.string :as str]
-            [clojure.data.json :as json])
-  (:import (java.io File)))
+  (:require [clojure.data.json :as json]))
 
 (def ^{:private true}
   json-root-dir
@@ -57,35 +55,27 @@
             :features
             (map transform-fn)))))
 
-(defn- read-all-json
-  ""
-  [fname transform-fn]
-  (delay (read-all-data fname transform-fn)))
+(def ^{:private true}
+  lines
+  "全路線を読み取った Collection (delayed)。"
+  (delay (read-all-data "JRW-railroad.geojson" json->line)))
 
-(defn- to-station-feature-map
-  ""
-  [info]
-  (assoc {}
-    :type "Feature"
-    :id (:id info)
-    :properties {:name (:station-name info)}
-    :geometry (:geometry info)))
+(def ^{:private true}
+  stations
+  "全駅を読み取った Collection (delayed)。"
+  (delay (read-all-data "JRW-stations.geojson" json->station)))
 
-(defn- to-line-feature-map
-  ""
-  [info]
-  (assoc {}
-    :type "Feature"
-    :id (:id info)
-    :properties {:name (:line-name info)}
-    :geometry (:geometry info)))
+(defn get-lines
+  "条件に適合する路線情報を返す。"
+  ([] (get-lines identity))
+  ([filter-fn]
+     (filter filter-fn @lines)))
 
-(defn make-feature-collection
-  ""
-  [coll]
-  (assoc {}
-    :type "FeatureCollection"
-    :features coll))
+(defn get-stations
+  "条件に適合する駅を返す。"
+  ([] (get-stations identity))
+  ([filter-fn]
+     (filter filter-fn @stations)))
 
 (defn distance
   "２つの点の間の距離(km)を求める。
@@ -109,18 +99,7 @@ see http://www.kiteretsu-so.com/archives/1183 "
      (let [d (distance lon1 lat1 lon2 lat2)]
        (if (> mid d)
          nil
-         (let [r (/ d mid)
+         (let [r (/ mid d)
                lon-n (+ lon1 (* r (- lon2 lon1)))
                lat-n (+ lat1 (* r (- lat2 lat1)))]
            [lon-n lat-n])))))
-
-;;(def lines (read-all-json "JRW-railroad.geojson" json->line))
-;;(->> @lines (map #(dissoc % :geometry :bounding-box)))
-;;(->> @lines (map to-line-feature-map) (take 2))
-;;(def stations (read-all-json "JRW-stations.geojson" json->station))
-;;(->> @stations (map to-station-feature-map) (take 10))
-;;(->> @stations (group-by :station-name) (vals) (filter #(>= (count %) 2)))
-;;(def h (->> @stations (group-by :station-name) (vals) (filter #(>= (count %) 2))))
-;;(def c (get-in (->> @lines (map to-line-feature-map) (first)) '(:geometry :coordinates)))
-;; (partition 2 1 c)
-;; (take 4 (map (fn [[p1 p2]] (distance p1 p2)) (partition 2 1 c)))
