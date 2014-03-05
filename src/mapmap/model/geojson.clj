@@ -1,4 +1,4 @@
-(ns mapmap.geojson
+(ns mapmap.model.geojson
   (:require [clojure.string :as str]
             [clojure.data.json :as json])
   (:import (java.io File)))

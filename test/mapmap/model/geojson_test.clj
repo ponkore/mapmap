@@ -1,30 +1,30 @@
-(ns mapmap.geojson-test
-  (:require [mapmap.geojson :refer :all]
+(ns mapmap.model.geojson-test
+  (:require [mapmap.model.geojson :refer :all]
             [midje.sweet :refer :all]))
 
 (fact "(private)calc-bounding-box"
   (fact "collection types: array, list, ..."
-    (#'mapmap.geojson/calc-bounding-box [[0 1] [2 3]]) => [0 1 2 3]
-    (#'mapmap.geojson/calc-bounding-box '([0 1] [2 3])) => [0 1 2 3]
-    (#'mapmap.geojson/calc-bounding-box '((0 1) (2 3))) => [0 1 2 3])
+    (#'mapmap.model.geojson/calc-bounding-box [[0 1] [2 3]]) => [0 1 2 3]
+    (#'mapmap.model.geojson/calc-bounding-box '([0 1] [2 3])) => [0 1 2 3]
+    (#'mapmap.model.geojson/calc-bounding-box '((0 1) (2 3))) => [0 1 2 3])
   (fact "many elements of array"
-    (#'mapmap.geojson/calc-bounding-box [[-1 -1] [20 30] [1 2] [40 5]]) => [-1 -1 40 30])
+    (#'mapmap.model.geojson/calc-bounding-box [[-1 -1] [20 30] [1 2] [40 5]]) => [-1 -1 40 30])
   (fact "other pattern"
-    (#'mapmap.geojson/calc-bounding-box [[3 2] [1 0]]) => [1 0 3 2]))
+    (#'mapmap.model.geojson/calc-bounding-box [[3 2] [1 0]]) => [1 0 3 2]))
 
 (fact "(private)json->station"
   (fact "argument is nil"
-    (#'mapmap.geojson/json->station nil) => nil)
+    (#'mapmap.model.geojson/json->station nil) => nil)
   (fact "argument is not Feature"
-    (#'mapmap.geojson/json->station {:type "foo",
+    (#'mapmap.model.geojson/json->station {:type "foo",
                                      :geometry {:coordinates [1.1 2.2], :type "Point"},
                                      :properties {}}) => nil)
   (fact "argument is not Point"
-    (#'mapmap.geojson/json->station {:type "Feature",
+    (#'mapmap.model.geojson/json->station {:type "Feature",
                                      :geometry {:coordinates [1.1 2.2], :type "Polygon"},
                                      :properties {}}) => nil)
   (fact "normal case 1"
-    (#'mapmap.geojson/json->station
+    (#'mapmap.model.geojson/json->station
      {:geometry {:coordinates [135.500035 34.73368], :type "Point"},
       :properties
       {:N05_002 "山陽新幹線",
@@ -43,17 +43,17 @@
 
 (fact "(private)json->line"
   (fact "argument is nil"
-    (#'mapmap.geojson/json->line nil) => nil)
+    (#'mapmap.model.geojson/json->line nil) => nil)
   (fact "argument is not Feature"
-    (#'mapmap.geojson/json->line {:type "foo",
+    (#'mapmap.model.geojson/json->line {:type "foo",
                                   :geometry {:coordinates [[1.1 2.2] [3.3 4.4]], :type "LineString"},
                                   :properties {}}) => nil)
   (fact "argument is not Point"
-    (#'mapmap.geojson/json->line {:type "Feature",
+    (#'mapmap.model.geojson/json->line {:type "Feature",
                                   :geometry {:coordinates [[1.1 2.2]], :type "Polygon"},
                                   :properties {}}) => nil)
   (fact "normal case 1"
-    (#'mapmap.geojson/json->line
+    (#'mapmap.model.geojson/json->line
      {:type "Feature",
       :id 16,
       :properties
