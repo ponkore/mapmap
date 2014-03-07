@@ -9,6 +9,7 @@ var stations = [];
 
 //Initialise the 'map' object
 $(function() {
+
   map = new OpenLayers.Map('map', {
     layers: [
       new OpenLayers.Layer.OSM.Mapnik("Mapnik")
@@ -67,14 +68,14 @@ $(function() {
     });
   }
 
-  function subset(a, b, keyfun) {
+  function subset(a, b, keyfn) {
     var h = {};
     for (i = 0; i < b.length; i++) {
-      h[keyfun(b[i])] = true;
+      h[keyfn(b[i])] = true;
     }
     var result = [];
     for (i = 0; i < a.length; i++) {
-      if (!h[keyfun(a[i])]) {
+      if (!h[keyfn(a[i])]) {
         result.push(a[i]);
       }
     }
@@ -84,26 +85,29 @@ $(function() {
   function create_features(param) {
     var geojson_format = new OpenLayers.Format.GeoJSON();
     var url = "/map/stations";
-    $.getJSON(url, param,
-      function(data, textStatus, jqXHR) {
-        var fetched = [];
-        for (var i = 0; i < data["features"].length; i++) {
-          var d = data["features"][i];
-          var geometry = geojson_format.parseGeometry(d["geometry"]);
-          geometry.transform(
-            new OpenLayers.Projection("EPSG:4326"),
-            map.getProjectionObject()
-          );
-          var f = create_feature_fn(d, geometry);
-          fetched.push(f);
-        }
-        var to_add = subset(fetched, stations, function(val) { return val["data"]["id"] }); // stations: global
-        var to_remove = subset(stations, fetched, function(val) { return val["data"]["id"] }); // stations: global
-        layer.addFeatures(to_add);
-        layer.removeFeatures(to_remove);
-        console.debug(to_add.length + " features added / " + to_remove.length + " features removed.");
-        stations = fetched;
-     });
+    $.getJSON(
+      url, param
+    ).done(function(data) {
+      var fetched = [];
+      for (var i = 0; i < data["features"].length; i++) {
+        var d = data["features"][i];
+        var geometry = geojson_format.parseGeometry(d["geometry"]);
+        geometry.transform(
+          new OpenLayers.Projection("EPSG:4326"),
+          map.getProjectionObject()
+        );
+        var f = create_feature_fn(d, geometry);
+        fetched.push(f);
+      }
+      var to_add = subset(fetched, stations, function(val) { return val["data"]["id"] });
+      var to_remove = subset(stations, fetched, function(val) { return val["data"]["id"] });
+      layer.addFeatures(to_add);
+      layer.removeFeatures(to_remove);
+      console.debug(to_add.length + " features added / " + to_remove.length + " features removed.");
+      stations = fetched;
+    }).fail(function(data) {
+      console.debug("create_features(error): " + data.status + " " + data.responseText + "." );
+    });
   }
 
   function mapMoved(event) {
