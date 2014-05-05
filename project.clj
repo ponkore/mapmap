@@ -25,6 +25,13 @@
                        :auto-reload?  false}}
    :dev {:dependencies [[ring-mock "0.1.5"]
                         [ring/ring-devel "1.2.1"]
-                        [midje "1.6.2"]]
+                        [midje "1.6.3"]]
+         :repl-options {:nrepl-middleware
+                        [cider.nrepl.middleware.classpath/wrap-classpath
+                         cider.nrepl.middleware.complete/wrap-complete
+                         cider.nrepl.middleware.info/wrap-info
+                         cider.nrepl.middleware.inspect/wrap-inspect
+                         cider.nrepl.middleware.stacktrace/wrap-stacktrace
+                         cider.nrepl.middleware.trace/wrap-trace]}
          :env {:selmer-dev true}}}
   :min-lein-version "2.0.0")
