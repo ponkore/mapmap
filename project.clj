@@ -2,14 +2,14 @@
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 [lib-noir "0.7.9"]
-                 [compojure "1.1.6"]
+                 [lib-noir "0.8.3"]
+                 [compojure "1.1.8"]
                  [ring-server "0.3.1"]
-                 [selmer "0.5.8"]
-                 [com.taoensso/timbre "2.7.1"]
+                 [selmer "0.6.6"]
+                 [com.taoensso/timbre "3.2.1"]
                  [com.postspectacular/rotor "0.1.0"]
-                 [com.taoensso/tower "2.0.1"]
-                 [markdown-clj "0.9.40"]
+                 [com.taoensso/tower "2.0.2"]
+                 [markdown-clj "0.9.44"]
                  [environ "0.4.0"]]
 
   :repl-options {:init-ns mapmap.repl}
@@ -24,7 +24,7 @@
                        :stacktraces?  false
                        :auto-reload?  false}}
    :dev {:dependencies [[ring-mock "0.1.5"]
-                        [ring/ring-devel "1.2.1"]
+                        [ring/ring-devel "1.2.2"]
                         [midje "1.6.3"]]
          :repl-options {:nrepl-middleware
                         [cider.nrepl.middleware.classpath/wrap-classpath
